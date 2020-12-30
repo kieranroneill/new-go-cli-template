@@ -1,0 +1,29 @@
+{
+  "branches": "main",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    ["@semantic-release/exec", {
+      "prepareCmd": "./scripts/build.sh ${nextRelease.version} && ./scripts/package.sh",
+      "publishCmd": "./scripts/version.sh ${nextRelease.version}"
+    }],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "VERSION"],
+        "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+      }
+    ],
+    ["@semantic-release/github", {
+      "assets": [
+        {
+          "path": "dist/cli.zip",
+          "name": "cli-${nextRelease.gitTag}.zip",
+          "label": "My CLI (${nextRelease.gitTag}) distribution"
+        }
+      ]
+    }]
+  ],
+  "repositoryUrl": "https://github.com/kieranroneill/new-go-cli-template"
+}
